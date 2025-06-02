@@ -25,6 +25,7 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Skopiowanie kodu źródłowego
 COPY main.py .
+COPY robot_test.robot .
 
 # Domyślne polecenie uruchomienia kontenera
 CMD ["python3", "main.py"]
