@@ -195,8 +195,8 @@ cython_debug/
 
 
 python_oop_and_testing/output/*
-!python_oop_and_testing/output/output.jpg
+!python_oop_and_testing/output/output.png
 
 
 robot_framework_test/output/*
-!robot_framework_test/output/output.jpg
+!robot_framework_test/output/output.png
