@@ -16,6 +16,10 @@ def test_open_dropdown(mocker):
     mock_wait.until.assert_called_once()
     mock_button.click.assert_called_once()
 
+    called_arg = mock_wait.until.call_args.args[0]
+    expected = EC.visibility_of_element_located((By.XPATH, button_xpath))
+    assert type(called_arg) == type(expected)
+
 def test_select_main_theme(mocker):
     mock_driver = mocker.Mock()
     mock_option = mocker.Mock()
@@ -31,3 +35,7 @@ def test_select_main_theme(mocker):
 
     mock_wait.until.assert_called_once()
     mock_option.click.assert_called_once()
+
+    called_arg = mock_wait.until.call_args.args[0]
+    expected = EC.visibility_of_element_located((By.XPATH, option_xpath))
+    assert type(called_arg) == type(expected)

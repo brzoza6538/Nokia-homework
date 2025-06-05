@@ -22,6 +22,11 @@ def test_open_context_menu(mocker):
     mock_action_chain.context_click.assert_called_once_with(mock_target)
     mock_action_chain.perform.assert_called_once()
 
+    called_arg = mock_wait.until.call_args.args[0]
+    expected = EC.visibility_of_element_located((By.XPATH, context_target_xpath))
+    assert type(called_arg) == type(expected)
+
+
 def test_click_style(mocker):
     mock_driver = mocker.Mock()
     mock_style = mocker.Mock()
@@ -44,6 +49,10 @@ def test_click_style(mocker):
     mock_action_chain.move_to_element.assert_called_once_with(mock_style)
     mock_action_chain.perform.assert_called_once()
 
+    called_arg = mock_wait.until.call_args.args[0]
+    expected = EC.visibility_of_element_located((By.XPATH, style_xpath))
+    assert type(called_arg) == type(expected)
+
 def test_click_underline(mocker):
     mock_driver = mocker.Mock()
     mock_underline = mocker.Mock()
@@ -60,3 +69,6 @@ def test_click_underline(mocker):
     mock_wait.until.assert_called_once()
     mock_underline.click.assert_called_once()
 
+    called_arg = mock_wait.until.call_args.args[0]
+    expected = EC.visibility_of_element_located((By.XPATH, underline_xpath))
+    assert type(called_arg) == type(expected)
