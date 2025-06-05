@@ -1,26 +1,31 @@
 # Nokia-homework
 
-Required:
-    Docker
-    Docker Compose
+**Required:**  
+&nbsp;&nbsp;&nbsp;&nbsp;Docker  
+&nbsp;&nbsp;&nbsp;&nbsp;Docker Compose  
 
-depending on your operating system use:
-    - ./run.sh on Linux
-    - .\run.ps1 on Windows (PowerShell)
+In case of running on Windows replace `run.sh` with `run.ps1`.
 
-To initialize robot framework for first task use command:
-    ./run.[extension] robot_framework_test
-    output image can be found in ./robot_framework_test/output.png
-    
-    (for convienience an example of output.png was uploaded to the repository)
+**To initialize Robot Framework for the first task use command:**
 
-To initialize robot framework for second task use command:
-    ./run.[extension] python_oop_and_testing
-    output image can be found in ./python_oop_and_testing/output.png
-    
-    (for convienience an example of output.png was uploaded to the repository)
+```bash
+./run.sh robot_framework_test
+```
 
-To test python classes used in second task use command:
-    ./run.[extension] python_oop_and_testing test
+Output image can be found in `./robot_framework_test/output.png`  
+(For convenience, an example of `output.png` was uploaded to the repository)
 
+**To initialize Robot Framework for the second task use command:**
 
+```bash
+./run.sh python_oop_and_testing
+```
+
+Output image can be found in `./python_oop_and_testing/output.png`  
+(For convenience, an example of `output.png` was uploaded to the repository)
+
+**To test Python classes used in the second task use command:**
+
+```bash
+./run.sh python_oop_and_testing test
+```
