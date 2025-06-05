@@ -1,48 +1,62 @@
-from unittest.mock import MagicMock
 import pytest
 from src.ContextMenu import ContextMenu
 from src.GlobalVariables import *
 
-def test_context_menu_interaction(mocker):
-    mock_driver = MagicMock()
-    mock_target = MagicMock()
-    mock_style = MagicMock()
-    mock_underline = MagicMock()
+def test_open_context_menu(mocker):
+    mock_driver = mocker.Mock()
+    mock_target = mocker.Mock()
 
-    def wait_until_side_effect(predicate):
-        locator = getattr(predicate, 'locator', None)
-        if locator:
-            by, xpath = locator
-            if xpath == context_target_xpath:
-                return mock_target
-            elif xpath == style_xpath:
-                return mock_style
-            elif xpath == underline_xpath:
-                return mock_underline
-        return predicate(mock_driver)
-
-    mock_wait = MagicMock()
-    mock_wait.until.side_effect = wait_until_side_effect
-
+    mock_wait = mocker.Mock()
+    mock_wait.until.return_value = mock_target
     mocker.patch('src.ContextMenu.WebDriverWait', return_value=mock_wait)
 
-    instances = []
-
-    def action_chains_side_effect(driver):
-        instance = MagicMock()
-        instance.context_click.return_value = instance
-        instance.move_to_element.return_value = instance
-        instance.perform.return_value = instance
-        instances.append(instance)
-        return instance
-
-    mocker.patch('src.ContextMenu.ActionChains', side_effect=action_chains_side_effect)
+    mock_action_chain = mocker.Mock()
+    mock_action_chain.context_click.return_value = mock_action_chain
+    mock_action_chain.perform.return_value = None
+    mocker.patch('src.ContextMenu.ActionChains', return_value=mock_action_chain)
 
     menu = ContextMenu(mock_driver)
     menu.open_context_menu()
+
+    mock_wait.until.assert_called_once()
+    mock_action_chain.context_click.assert_called_once_with(mock_target)
+    mock_action_chain.perform.assert_called_once()
+
+def test_click_style(mocker):
+    mock_driver = mocker.Mock()
+    mock_style = mocker.Mock()
+
+    mock_wait = mocker.Mock()
+    mock_wait.until.return_value = mock_style
+    mocker.patch('src.ContextMenu.WebDriverWait', return_value=mock_wait)
+
+    mock_action_chain = mocker.Mock()
+    mock_action_chain.move_to_element.return_value = mock_action_chain
+    mock_action_chain.perform.return_value = None
+    mocker.patch('src.ContextMenu.ActionChains', return_value=mock_action_chain)
+
+    mocker.patch('src.ContextMenu.time.sleep')
+
+    menu = ContextMenu(mock_driver)
     menu.click_style()
+
+    mock_wait.until.assert_called_once()
+    mock_action_chain.move_to_element.assert_called_once_with(mock_style)
+    mock_action_chain.perform.assert_called_once()
+
+def test_click_underline(mocker):
+    mock_driver = mocker.Mock()
+    mock_underline = mocker.Mock()
+
+    mock_wait = mocker.Mock()
+    mock_wait.until.return_value = mock_underline
+    mocker.patch('src.ContextMenu.WebDriverWait', return_value=mock_wait)
+
+    mocker.patch('src.ContextMenu.time.sleep')
+
+    menu = ContextMenu(mock_driver)
     menu.click_underline()
 
-    assert len(instances) >= 2
-    for instance in instances:
-        instance.perform.assert_called_once()
+    mock_wait.until.assert_called_once()
+    mock_underline.click.assert_called_once()
+
