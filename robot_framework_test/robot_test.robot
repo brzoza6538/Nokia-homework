@@ -13,21 +13,13 @@ Robot Framework Test Automation Task
 
     Scroll Down
 
-    Select Demo Frame
-    Wait For Context Menu To Load
-    Unselect Demo Frame
-
     Select Theme 
-
-    Select Demo Frame
-    Wait For Context Menu To Load
 
     Select Style
     
     Sleep    1s
     Capture Page Screenshot          output.png
 
-    Unselect Demo Frame
     [Teardown]    Close Browser
 
 *** Keywords ***
@@ -51,22 +43,27 @@ Wait For Context Menu To Load
     Wait Until Element Is Visible    xpath=//div[contains(@class,'target')]    10s
 
 Select Theme 
+    Select Demo Frame
+    Wait For Context Menu To Load
+    Unselect Demo Frame
+
     Click Element    xpath=//button[@aria-label='Change theme']
     Wait Until Element Is Visible    xpath=//button[.//div[text()='Main']]    10s
     Sleep    1s
     Click Element    xpath=//button[.//div[text()='Main']]
 
 Select Style
+    Select Demo Frame
+    Wait For Context Menu To Load
+
     Open Context Menu    xpath=//div[contains(@class,'target')]
-    Capture Page Screenshot          9.png
     Wait Until Element Is Visible     xpath=//li[.//span[text()='Style']]    10s
     Sleep    1s
     Mouse Over    xpath=//li[.//span[text()='Style']]
-    Capture Page Screenshot          10.png
     Wait Until Element Is Visible   xpath=//li[.//span[text()='Underline']]    10s
     Sleep    1s
-    Capture Page Screenshot          11.png
     Click Element    xpath=//li[.//span[text()='Underline']]
+    Unselect Demo Frame
 
 
 Log Firefox And GeckoDriver Version
