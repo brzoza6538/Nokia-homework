@@ -19,6 +19,9 @@ RUN pip install get-gecko-driver && \
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-COPY robot_test.robot .
+COPY robot_tests/ robot_tests/
+COPY tests/ tests/
+COPY src/ src/
 
-CMD ["robot", "--outputdir", "/app/output", "robot_test.robot"]
+ENV PYTHONPATH=/app
+CMD ["robot", "--outputdir", "/app/output", "-P", "src", "robot_tests/robot_test.robot"]

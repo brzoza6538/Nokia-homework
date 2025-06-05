@@ -1,8 +1,7 @@
 from unittest.mock import MagicMock
 import pytest
 from src.ContextMenu import ContextMenu
-from selenium.webdriver.common.by import By
-
+from src.GlobalVariables import *
 
 def test_context_menu_interaction(mocker):
     mock_driver = MagicMock()
@@ -10,24 +9,23 @@ def test_context_menu_interaction(mocker):
     mock_style = MagicMock()
     mock_underline = MagicMock()
 
-    def wait_until_side_effect(condition):
-        xpath = condition.locator[1]
-        if xpath == "//div[contains(@class,'target')]":
-            return mock_target
-        elif xpath == "//li[.//span[text()='Style']]":
-            return mock_style
-        elif xpath == "//li[.//span[text()='Underline']]":
-            return mock_underline
-        else:
-            return MagicMock()
+    def wait_until_side_effect(predicate):
+        locator = getattr(predicate, 'locator', None)
+        if locator:
+            by, xpath = locator
+            if xpath == context_target_xpath:
+                return mock_target
+            elif xpath == style_xpath:
+                return mock_style
+            elif xpath == underline_xpath:
+                return mock_underline
+        return predicate(mock_driver)
 
     mock_wait = MagicMock()
-    mock_wait.until.side_effect = [mock_target, mock_style, mock_underline]
+    mock_wait.until.side_effect = wait_until_side_effect
 
-    # Podmieniamy WebDriverWait w ContextMenu na mock z naszym wait
     mocker.patch('src.ContextMenu.WebDriverWait', return_value=mock_wait)
 
-    # Mockujemy ActionChains, by zwracał chainable mocki
     instances = []
 
     def action_chains_side_effect(driver):
@@ -38,14 +36,13 @@ def test_context_menu_interaction(mocker):
         instances.append(instance)
         return instance
 
-    mock_action_chains = mocker.patch('src.ContextMenu.ActionChains', side_effect=action_chains_side_effect)
+    mocker.patch('src.ContextMenu.ActionChains', side_effect=action_chains_side_effect)
 
     menu = ContextMenu(mock_driver)
     menu.open_context_menu()
     menu.click_style()
     menu.click_underline()
 
-    # Sprawdź, czy ActionChains zostały wywołane i perform wywołane na każdym etapie
     assert len(instances) >= 2
     for instance in instances:
         instance.perform.assert_called_once()

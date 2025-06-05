@@ -1,27 +1,9 @@
-from DropdownElement import DropdownElement
-from ContextMenu import ContextMenu
-from robot.api.deco import keyword
-from robot.libraries.BuiltIn import BuiltIn
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+
+from .GlobalVariables import *
+from .DropdownElement import *
+from .ContextMenu import *
 
 driver_instance = None
-
-
-demo_frame_xpath = "//iframe[contains(@class,'demo-module--demoFrame')]"
-contex_target_xpath = "//div[contains(@class,'target')]"
-
-def select_demo_frame(driver):
-    WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, demo_frame_xpath)))
-    iframe = driver.find_element(By.XPATH, demo_frame_xpath)
-    driver.switch_to.frame(iframe)
-def unselect_demo_frame(driver):
-    driver.switch_to.default_content()
-
-def wait_for_context_menu_to_load(driver):
-        WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, context_target_xpath)))
-
 
 class CustomKeywords:
 
@@ -31,21 +13,39 @@ class CustomKeywords:
         seleniumlib = BuiltIn().get_library_instance('SeleniumLibrary')
         driver_instance = seleniumlib.driver
 
+    @keyword("Select Demo Frame")
+    def select_demo_frame(self):
+        WebDriverWait(driver_instance, wait_until_time).until(
+            EC.visibility_of_element_located((By.XPATH, demo_frame_xpath))
+        )
+        iframe = driver_instance.find_element(By.XPATH, demo_frame_xpath)
+        driver_instance.switch_to.frame(iframe)
+
+    @keyword("Unselect Demo Frame")
+    def unselect_demo_frame(self):
+        driver_instance.switch_to.default_content()
+
+    @keyword("Wait For Context Menu To Load")
+    def wait_for_context_menu_to_load(self):
+        WebDriverWait(driver_instance, wait_until_time).until(
+            EC.visibility_of_element_located((By.XPATH, context_target_xpath))
+        )
+
     @keyword("Change Theme Using Python Keyword")
     def change_theme_using_python_keyword(self):
         dropdown = DropdownElement(driver_instance)
-        select_demo_frame(dropdown.driver)
-        wait_for_context_menu_to_load(dropdown.driver)
-        unselect_demo_frame(dropdown.driver)
+        self.select_demo_frame()
+        self.wait_for_context_menu_to_load()
+        self.unselect_demo_frame()
         dropdown.open_dropdown()
         dropdown.select_main_theme()
 
     @keyword("Interact With Context Menu")
     def interact_with_context_menu(self):
         context_menu = ContextMenu(driver_instance)
-        select_demo_frame(context_menu.driver)
-        wait_for_context_menu_to_load(context_menu.driver)
+        self.select_demo_frame()
+        self.wait_for_context_menu_to_load()
         context_menu.open_context_menu()
         context_menu.click_style()
         context_menu.click_underline()
-        unselect_demo_frame(context_menu.driver)
+        self.unselect_demo_frame()

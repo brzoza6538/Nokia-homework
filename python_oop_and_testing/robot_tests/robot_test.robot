@@ -1,12 +1,12 @@
 *** Settings ***
 Library    SeleniumLibrary
 Library    Process
-Library    CustomKeywords.py
+Library    src.CustomKeywords
 
 
 *** Variables ***
-${URL}            https://www.telerik.com/kendo-react-ui/components/layout/contextmenu
-${REMOTE_URL}     http://localhost:4444/wd/hub
+${URL}          https://www.telerik.com/kendo-react-ui/components/layout/contextmenu
+${REMOTE_URL}   http://selenium:4444/wd/hub
 
 *** Test Cases ***
 Robot Framework Test Automation Task
@@ -14,7 +14,6 @@ Robot Framework Test Automation Task
     Handle Cookies
     Scroll To Context Menu Example
     Set Driver From SeleniumLibrary
-
 
     Change Theme Using Python Keyword
     Interact With Context Menu

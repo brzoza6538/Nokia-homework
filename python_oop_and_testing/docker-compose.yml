@@ -1,0 +1,19 @@
+services:
+  selenium:
+    image: selenium/standalone-firefox:latest
+    container_name: selenium
+    ports:
+      - "4444:4444"
+    restart: unless-stopped
+
+  robot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: robot_framework_test
+    depends_on:
+      - selenium
+    volumes:
+      - ./output:/app/output
+    stdin_open: true
+    tty: true
