@@ -9,51 +9,64 @@ ${REMOTE_URL}   http://selenium:4444/wd/hub
 *** Test Cases ***
 Robot Framework Test Automation Task
     Open Page
-    Run Keyword And Ignore Error    Handle Cookies
+    Handle Cookies
 
-    Execute JavaScript    document.evaluate("//p[text()='The following example demonstrates the KendoReact ContextMenu in action.']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollIntoView(true);
+    Scroll Down
 
-    Wait Until Element Is Visible    xpath=//iframe[contains(@class,'demo-module--demoFrame')]    10s
-    Select Frame    xpath=//iframe[contains(@class,'demo-module--demoFrame')]
-    Wait Until Element Is Visible    xpath=//div[contains(@class,'target')]    10s
-    Unselect Frame
+    Select Demo Frame
+    Wait For Context Menu To Load
+    Unselect Demo Frame
 
-    Click Element    xpath=//button[@aria-label='Change theme']
-    Wait Until Element Is Visible    xpath=//button[.//div[text()='Main']]    10s
-    Click Element    xpath=//button[.//div[text()='Main']]
+    Select Theme 
 
-    Wait Until Element Is Visible    xpath=//iframe[contains(@class,'demo-module--demoFrame')]    10s
-    Select Frame    xpath=//iframe[contains(@class,'demo-module--demoFrame')]
-    Wait Until Element Is Visible    xpath=//div[contains(@class,'target')]    10s
-    Open Context Menu    xpath=//div[contains(@class,'target')]
+    Select Demo Frame
+    Wait For Context Menu To Load
 
-    Capture Page Screenshot          0.png
-
-    Wait Until Element Is Visible     xpath=//li[.//span[text()='Style']]    10s
-    Sleep    1s
-    Mouse Over    xpath=//li[.//span[text()='Style']]
-
-    Capture Page Screenshot          1.png
-
-    Wait Until Element Is Visible   xpath=//li[.//span[text()='Underline']]    10s
-    Sleep    1s
-    Capture Page Screenshot          2.png
-    Click Element    xpath=//li[.//span[text()='Underline']]
-
-    Capture Page Screenshot          3.png
-
+    Select Style
+    
     Sleep    1s
     Capture Page Screenshot          output.png
 
-    Unselect Frame
+    Unselect Demo Frame
     [Teardown]    Close Browser
 
 *** Keywords ***
-Handle Cookies
+Handle Cookies    
+    Sleep    1s
     Wait Until Element Is Visible    xpath=//button[contains(@id,'onetrust-reject-all-handler')]    10s
     Sleep    1s
     Click Element    xpath=//button[contains(@id,'onetrust-reject-all-handler')]
+
+Scroll Down
+    Execute JavaScript    document.evaluate("//p[text()='The following example demonstrates the KendoReact ContextMenu in action.']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollIntoView(true);
+
+Select Demo Frame
+    Wait Until Element Is Visible    xpath=//iframe[contains(@class,'demo-module--demoFrame')]    10s
+    Select Frame    xpath=//iframe[contains(@class,'demo-module--demoFrame')]
+
+Unselect Demo Frame
+    Unselect Frame
+
+Wait For Context Menu To Load
+    Wait Until Element Is Visible    xpath=//div[contains(@class,'target')]    10s
+
+Select Theme 
+    Click Element    xpath=//button[@aria-label='Change theme']
+    Wait Until Element Is Visible    xpath=//button[.//div[text()='Main']]    10s
     Sleep    1s
+    Click Element    xpath=//button[.//div[text()='Main']]
+
+Select Style
+    Open Context Menu    xpath=//div[contains(@class,'target')]
+    Capture Page Screenshot          9.png
+    Wait Until Element Is Visible     xpath=//li[.//span[text()='Style']]    10s
+    Sleep    1s
+    Mouse Over    xpath=//li[.//span[text()='Style']]
+    Capture Page Screenshot          10.png
+    Wait Until Element Is Visible   xpath=//li[.//span[text()='Underline']]    10s
+    Sleep    1s
+    Capture Page Screenshot          11.png
+    Click Element    xpath=//li[.//span[text()='Underline']]
 
 
 Log Firefox And GeckoDriver Version
