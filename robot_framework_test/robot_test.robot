@@ -4,11 +4,12 @@ Library    Process
 
 *** Variables ***
 ${URL}          https://www.telerik.com/kendo-react-ui/components/layout/contextmenu
-${REMOTE_URL}   http://selenium:4444/wd/hub
 ${wait_until_time}    10
 ${animation_wait_time}    1
 *** Test Cases ***
 Robot Framework Test Automation Task
+    Log Firefox And GeckoDriver Version
+
     Open Page
     Handle Cookies
 
@@ -68,12 +69,13 @@ Select Style
 
 
 Log Firefox And GeckoDriver Version
-    ${firefox_version}=    Run Process    firefox    --version    shell=True    stdout=TRUE
+    ${firefox_version}=    Run Process    firefox    --version
     Log    Firefox version: ${firefox_version.stdout}
-    ${gecko_version}=     Run Process    geckodriver    --version    shell=True    stdout=TRUE
+    ${gecko_version}=     Run Process    geckodriver    --version
     Log    Geckodriver version: ${gecko_version.stdout}
 
 Open Page
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].FirefoxOptions()    sys, selenium.webdriver
-    Create WebDriver    Remote    command_executor=${REMOTE_URL}    options=${options}
+    Call Method    ${options}    add_argument    --headless
+    Create WebDriver    Firefox    options=${options}
     Go To    ${URL}

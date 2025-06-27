@@ -7,10 +7,10 @@ Variables        src.GlobalVariables
 
 *** Variables ***
 ${URL}          https://www.telerik.com/kendo-react-ui/components/layout/contextmenu
-${REMOTE_URL}   http://selenium:4444/wd/hub
 
 *** Test Cases ***
 Robot Framework Test Automation Task
+    Log Firefox And GeckoDriver Version
     Open Page
     Handle Cookies
     Scroll To Context Menu Example
@@ -34,8 +34,14 @@ Scroll To Context Menu Example
     Execute JavaScript    document.evaluate("//p[text()='The following example demonstrates the KendoReact ContextMenu in action.']", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.scrollIntoView(true);
     Sleep    ${animation_wait_time}s
 
+Log Firefox And GeckoDriver Version
+    ${firefox_version}=    Run Process    firefox    --version
+    Log    Firefox version: ${firefox_version.stdout}
+    ${gecko_version}=     Run Process    geckodriver    --version
+    Log    Geckodriver version: ${gecko_version.stdout}
+
 Open Page
     ${options}=    Evaluate    sys.modules['selenium.webdriver'].FirefoxOptions()    sys, selenium.webdriver
-    Create WebDriver    Remote    command_executor=${REMOTE_URL}    options=${options}
+    Call Method    ${options}    add_argument    --headless
+    Create WebDriver    Firefox    options=${options}
     Go To    ${URL}
-

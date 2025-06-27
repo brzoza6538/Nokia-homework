@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
     curl wget tar xz-utils ca-certificates bzip2 \
-    libgtk-3-0 libdbus-glib-1-2 libxt6 libx11-xcb1 libdrm2 libdbus-1-3 libxcomposite1 libxdamage1 libxrandr2 \
+    libgtk-3-0 libdbus-glib-1-2 libxt6 libx11-xcb1 libdrm2 libxcomposite1 libxdamage1 libxrandr2 \
     libasound2 libcups2 libatk1.0-0 libatk-bridge2.0-0 libpci3 libxfixes3 libxrender1 libxss1 libgconf-2-4 \
     && rm -rf /var/lib/apt/lists/*
 

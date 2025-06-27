@@ -1,18 +1,10 @@
 services:
-  selenium:
-    image: selenium/standalone-firefox:latest
-    container_name: selenium
-    ports:
-      - "4444:4444"
-    restart: unless-stopped
 
   robot_framework_test:
     build:
       context: ./robot_framework_test
       dockerfile: Dockerfile
     container_name: robot_framework_test
-    depends_on:
-      - selenium
     volumes:
       - ./robot_framework_test/output:/app/output
     stdin_open: true
@@ -24,8 +16,6 @@ services:
       context: ./python_oop_and_testing
       dockerfile: Dockerfile
     container_name: python_oop_and_testing
-    depends_on:
-      - selenium
     volumes:
       - ./python_oop_and_testing/output:/app/output
     stdin_open: true
