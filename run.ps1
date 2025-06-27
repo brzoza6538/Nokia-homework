@@ -3,23 +3,8 @@ param (
     [string]$Command
 )
 
-function Start-SeleniumIfNeeded {
-    $seleniumRunning = docker ps --filter "name=selenium" --filter "status=running" | Select-String "selenium"
-    if (-not $seleniumRunning) {
-        Write-Host "Starting Selenium..."
-        docker compose up --build -d selenium
-    }
-
-    Write-Host "Waiting for Selenium to be ready..."
-    do {
-        Start-Sleep -Seconds 3
-        $status = Invoke-RestMethod -Uri http://localhost:4444/wd/hub/status -UseBasicParsing -ErrorAction SilentlyContinue
-    } while ($null -eq $status -or $status.value.ready -ne $true)
-}
-
 switch ($Service) {
     "python_oop_and_testing" {
-        Start-SeleniumIfNeeded
 
         if ($Command -eq "test") {
             docker compose build python_oop_and_testing
@@ -29,7 +14,6 @@ switch ($Service) {
         }
     }
     "robot_framework_test" {
-        Start-SeleniumIfNeeded
         docker compose up --build robot_framework_test
     }
     default {
